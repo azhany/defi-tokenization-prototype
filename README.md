@@ -75,6 +75,18 @@ On first launch, select "Configuration" from the main menu to set up your enviro
 
 ## Development
 
+
+### Parallel Handling & Goroutines
+
+This project uses Go's goroutines and WaitGroups for high-throughput parallel processing in several areas:
+
+- **Contract Initialization:** All smart contract clients are initialized in parallel for faster startup.
+- **Balance Updates:** Token, pool, and NFT balances are fetched concurrently for responsive UI updates.
+- **Batch Transactions:** You can process multiple transactions (mint, deposit, withdraw, NFT mint) in parallel using the provided batch API.
+- **Bulk NFT Minting:** Multiple NFTs can be minted simultaneously for speed and scalability.
+
+These improvements allow the TUI to handle more requests efficiently and provide a smoother user experience. Make sure contract bindings are generated with `abigen` for these features to work.
+
 The project structure:
 
 ```

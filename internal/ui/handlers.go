@@ -3,8 +3,11 @@ package ui
 import (
 	"math/big"
 	"strconv"
+	"sync"
 
 	"defi-tokenization-prototype/internal/eth"
+
+	"github.com/rivo/tview"
 )
 
 type Handlers struct {
@@ -110,21 +113,44 @@ func (t *DefiTUI) showMessage(msg string) {
 
 func (t *DefiTUI) updateBalances() {
 	go func() {
-		tokenBalance, err := t.ethClient.StableToken.BalanceOf(nil, t.ethClient.Auth.From)
-		if err != nil {
-			t.showError("Failed to fetch token balance")
+		var wg sync.WaitGroup
+		var tokenBalance, poolBalance *big.Int
+		var nfts []*big.Int
+		var tokenErr, poolErr, nftErr error
+
+		wg.Add(3)
+
+		// Fetch token balance
+		go func() {
+			defer wg.Done()
+			tokenBalance, tokenErr = t.ethClient.StableToken.BalanceOf(nil, t.ethClient.Auth.From)
+		}()
+
+		// Fetch pool balance
+		go func() {
+			defer wg.Done()
+			poolBalance, poolErr = t.ethClient.LendingPool.GetUserBalance(nil, t.ethClient.Auth.From)
+		}()
+
+		// Fetch NFTs
+		go func() {
+			defer wg.Done()
+			nfts, nftErr = t.ethClient.NFTContract.TokensOfOwner(nil, t.ethClient.Auth.From)
+		}()
+
+		wg.Wait()
+
+		// Check for errors
+		if tokenErr != nil {
+			t.showError("Failed to fetch token balance: " + tokenErr.Error())
 			return
 		}
-
-		poolBalance, err := t.ethClient.LendingPool.GetUserBalance(nil, t.ethClient.Auth.From)
-		if err != nil {
-			t.showError("Failed to fetch pool balance")
+		if poolErr != nil {
+			t.showError("Failed to fetch pool balance: " + poolErr.Error())
 			return
 		}
-
-		nfts, err := t.ethClient.NFTContract.TokensOfOwner(nil, t.ethClient.Auth.From)
-		if err != nil {
-			t.showError("Failed to fetch NFTs")
+		if nftErr != nil {
+			t.showError("Failed to fetch NFTs: " + nftErr.Error())
 			return
 		}
 

@@ -83,17 +83,3 @@ func (t *DefiTUI) setupConfigScreen() {
 
 	t.pages.AddPage("config", configForm, true, false)
 }
-
-// Update the showMainMenu function to include the config option
-func (t *DefiTUI) showMainMenu() {
-	menu := tview.NewList().
-		AddItem("Configuration", "Set up your DeFi environment", 'C', func() { t.pages.SwitchToPage("config") }).
-		AddItem("Mint Tokens", "Mint new stable tokens", 'M', func() { t.pages.SwitchToPage("mint") }).
-		AddItem("Lending Pool", "Deposit or withdraw from lending pool", 'L', func() { t.pages.SwitchToPage("lending") }).
-		AddItem("NFT Management", "Mint and manage NFTs", 'N', func() { t.pages.SwitchToPage("nft") }).
-		AddItem("View Balances", "Check your token and NFT balances", 'B', func() { t.pages.SwitchToPage("balance") }).
-		AddItem("Quit", "Exit the application", 'Q', t.app.Stop)
-
-	menu.SetBorder(true).SetTitle("DeFi TUI")
-	t.pages.AddPage("menu", menu, true, true)
-}

@@ -24,6 +24,7 @@ func NewDefiTUI(ethClient *eth.EthClient) *DefiTUI {
 		ethClient: ethClient,
 	}
 
+	tui.setupConfigScreen()
 	tui.setupMintScreen()
 	tui.setupLendingScreen()
 	tui.setupNFTScreen()
@@ -75,6 +76,7 @@ func (t *DefiTUI) setupBalanceScreen() {
 
 func (t *DefiTUI) showMainMenu() {
 	menu := tview.NewList().
+		AddItem("Configuration", "Set up your DeFi environment", 'C', func() { t.pages.SwitchToPage("config") }).
 		AddItem("Mint Tokens", "Mint new stable tokens", 'M', func() { t.pages.SwitchToPage("mint") }).
 		AddItem("Lending Pool", "Deposit or withdraw from lending pool", 'L', func() { t.pages.SwitchToPage("lending") }).
 		AddItem("NFT Management", "Mint and manage NFTs", 'N', func() { t.pages.SwitchToPage("nft") }).

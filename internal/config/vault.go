@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 
 	"github.com/99designs/keyring"
-	"github.com/zalando/go-keyring"
 )
 
 type Config struct {
@@ -30,9 +29,9 @@ func NewVault() (*Vault, error) {
 	ring, err := keyring.Open(keyring.Config{
 		ServiceName: appName,
 		AllowedBackends: []keyring.BackendType{
-			keyring.SecretServiceBackend,  // Linux
-			keyring.KeychainBackend,       // macOS
-			keyring.WinCredentialsBackend, // Windows
+			keyring.SecretServiceBackend, // Linux
+			keyring.KeychainBackend,      // macOS
+			keyring.WinCredBackend,       // Windows
 		},
 	})
 
