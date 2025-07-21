@@ -87,7 +87,9 @@ This project uses Go's goroutines and WaitGroups for high-throughput parallel pr
 
 These improvements allow the TUI to handle more requests efficiently and provide a smoother user experience. Make sure contract bindings are generated with `abigen` for these features to work.
 
-The project structure:
+### Updated Project Structure
+
+The updated project structure includes a separation of contract interfaces and mock implementations for better modularity:
 
 ```
 ├── cmd/
@@ -95,7 +97,11 @@ The project structure:
 │       └── main.go
 ├── internal/
 │   ├── eth/
-│   │   └── client.go
+│   │   ├── client.go
+│   │   ├── contracts/
+│   │   │   └── interfaces.go
+│   │   └── mock/
+│   │       └── contracts.go
 │   ├── config/
 │   │   └── vault.go
 │   └── ui/
@@ -104,3 +110,7 @@ The project structure:
 │       └── config.go
 └── go.mod
 ```
+
+### Mock Implementations
+
+For testing purposes, mock implementations of the contract interfaces are provided in the `internal/eth/mock` package. These can be used to simulate contract interactions without requiring actual blockchain deployments. Replace these with real contract bindings generated using `abigen` for production use.
