@@ -25,14 +25,18 @@ go mod tidy
 
 ## Configuration
 
-Set the following environment variables:
+### Interactive Configuration & Secure Vault
 
-- `INFURA_KEY`: Your Infura project key
-- `KEYSTORE_PATH`: Path to your Ethereum keystore file
-- `KEYSTORE_PASS`: Password for your keystore
-- `TOKEN_ADDRESS`: Deployed stable token contract address
-- `POOL_ADDRESS`: Deployed lending pool contract address
-- `NFT_ADDRESS`: Deployed NFT contract address
+On first run, or anytime via the "Configuration" menu, you can set all required settings interactively:
+
+- **Infura Key**: Your Infura project key
+- **Keystore Path**: Path to your Ethereum keystore file
+- **Keystore Password**: Password for your keystore
+- **Token Address**: Deployed stable token contract address
+- **Pool Address**: Deployed lending pool contract address
+- **NFT Address**: Deployed NFT contract address
+
+All sensitive data is stored securely using your system's keyring (Windows Credential Manager, macOS Keychain, Linux Secret Service) or encrypted file vault if unavailable. No need to set environment variables manually.
 
 ## Running the application
 
@@ -40,6 +44,8 @@ Set the following environment variables:
 cd cmd/defi-tui
 go run main.go
 ```
+
+On first launch, select "Configuration" from the main menu to set up your environment. You can update these settings at any time.
 
 ## Navigation
 
@@ -78,8 +84,11 @@ The project structure:
 ├── internal/
 │   ├── eth/
 │   │   └── client.go
+│   ├── config/
+│   │   └── vault.go
 │   └── ui/
 │       ├── tui.go
-│       └── handlers.go
+│       ├── handlers.go
+│       └── config.go
 └── go.mod
 ```
